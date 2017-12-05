@@ -115,27 +115,27 @@
     // This will then store the data inside the variable "snapshot". We could rename "snapshot" to anything.
     database.ref().on("value", function(snapshot) {
 
-      // Then we console.log the value of snapshot
-      console.log(snapshot);
+		// Then we console.log the value of snapshot
+		console.log(snapshot);
 
-		if(p1LoggedIn) {
+		// if(p1LoggedIn) {
 			$("#player1Name").text(snapshot.val().p1Name);
 			$("#player1LblWins").text("Wins: " + snapshot.val().p1Wins);
 			$("#player1LblLosses").text("Losses: " + snapshot.val().p1Losses);
-		}
+		// }
 
-      // Then we change the html associated with the number.
-      $("#gameStats").text("Player 1: " + snapshot.val().p1Choice);
+    	// Then we change the html associated with the number.
+    	$("#gameStats").text("Player 1: " + snapshot.val().p1Choice);
 
-      // Then update the clickCounter variable with data from the database.
-      p1Choice = snapshot.val().p1Choice;
+    	// Then update the clickCounter variable with data from the database.
+    	p1Choice = snapshot.val().p1Choice;
 
     // If there is an error that Firebase runs into -- it will be stored in the "errorObject"
     // Again we could have named errorObject anything we wanted.
     }, function(errorObject) {
 
-      // In case of error this will print the error
-      console.log("The read failed: " + errorObject.code);
+    	// In case of error this will print the error
+    	console.log("The read failed: " + errorObject.code);
     });
 
     // Draws Player 1's Wins & Losses at the bottom of the Player 1 Div
