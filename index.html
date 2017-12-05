@@ -104,7 +104,7 @@
       console.log(snapshot);
 
       // Then we change the html associated with the number.
-      $("#gameStats").text(snapshot.val().p1Choice);
+      $("#gameStats").text("Player 1: " + snapshot.val().p1Choice);
 
       // Then update the clickCounter variable with data from the database.
       p1Choice = snapshot.val().p1Choice;
