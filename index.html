@@ -94,11 +94,13 @@
 	var p1Name = "Steve";
 	var playerTurn = 1;
 	var p1LoggedIn = true;
+	var p1Choice = "none";
 
 	database.ref().set({
 		p1Wins: p1Wins,
 		p1Losses: p1Losses,
-		p1Name: p1Name
+		p1Name: p1Name,
+		p1Choice: p1Choice
 	})
 
 	// Using .on("value", function(snapshot)) syntax will retrieve the data
@@ -115,8 +117,10 @@
 			$("#player1LblLosses").text("Losses: " + snapshot.val().p1Losses);
 		// }
 
-    	// Then we change the html associated with the number.
-    	$("#gameStats").text("Player 1: " + snapshot.val().p1Choice);
+		if(snapshot.val().p1Choice != "none") {
+	    	// Then we change the html associated with the number.
+	    	$("#gameStats").text("Player 1: " + snapshot.val().p1Choice);
+	    }
 
     	// Then update the clickCounter variable with data from the database.
     	p1Choice = snapshot.val().p1Choice;
