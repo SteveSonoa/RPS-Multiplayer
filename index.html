@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<!-- Load Firebase -->
+	<script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+
+	<!-- Load Font Awesome -->
+	<script src="https://use.fontawesome.com/e14e0f3537.js"></script>
+
+	<!-- Load local files -->
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="assets/javascript/data.js"></script>
+
+	<title>Rock Paper Scissors</title>
+</head>
+<body>
+
+	<!-- Headline header outside the container div -->
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<h1>Rock Paper Scissors</h1>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="playerIntro"></div>
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="turnStatus"></div>
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="player1Stats"></div>
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="gameStats"></div>
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="player2Stats"></div>
+			<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"></div>
+			<div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" id="chat">
+				<textarea class="form-control" rows="6" id="chatTextArea"></textarea>
+				<form class="form-horizontal">
+					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<input type="text" class="form-control" id="inputChatText" placeholder="Send A Message">
+						<button type="submit" class="btn btn-default" id="chatSubmit">Send</button>
+					</div>
+				</form>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"></div>			
+		</div>
+	</div>
+
+<script type="text/javascript">
+
+	// Initialize Firebase
+	var config = {
+		apiKey: "AIzaSyAD0J15qtz5LDSLsrm1hBNAoZ4kP0cS_FY",
+		authDomain: "stevesonoa-playground.firebaseapp.com",
+		databaseURL: "https://stevesonoa-playground.firebaseio.com",
+		projectId: "stevesonoa-playground",
+		storageBucket: "",
+		messagingSenderId: "1052450720326"
+	};
+	firebase.initializeApp(config);
+
+	// Get a reference to the database service
+	var database = firebase.database();
+
+	var p1Wins = 0;
+	var p1Losses = 0;
+	var p1Name = "Steve";
+	var playerTurn = 1;
+
+	if(playerTurn == 1) {
+		$("#player1Stats").html(
+			'<div id="player1Name">' + p1Name + '</div>'
+			+ '<div class="choice" id="rock">Rock</div>'
+			+ '<div class="choice" id="paper">Paper</div>'
+			+ '<div class="choice" id="scissors">Scissors</div>'
+		);
+	}
+
+	$(document).on("click", ".choice", function() {
+
+		p1Choice = $(this).attr("id");
+		console.log(p1Choice);
+
+		database.ref().set({
+			p1Choice: p1Choice
+		});
+	});
+
+	// Using .on("value", function(snapshot)) syntax will retrieve the data
+    // from the database (both initially and every time something changes)
+    // This will then store the data inside the variable "snapshot". We could rename "snapshot" to anything.
+    database.ref().on("value", function(snapshot) {
+
+      // Then we console.log the value of snapshot
+      console.log(snapshot);
+
+      // Then we change the html associated with the number.
+      $("#gameStats").text(snapshot.val().p1Choice);
+
+      // Then update the clickCounter variable with data from the database.
+      p1Choice = snapshot.val().p1Choice;
+
+    // If there is an error that Firebase runs into -- it will be stored in the "errorObject"
+    // Again we could have named errorObject anything we wanted.
+    }, function(errorObject) {
+
+      // In case of error this will print the error
+      console.log("The read failed: " + errorObject.code);
+    });
+
+/*
+DBVARS
+ID          VALUE
+p1Name      string
+p2Name      string
+p1Choice    string
+p2Choice    string
+p1Wins      num
+p1Losses    num
+p2Wins      num
+p2Losses    num
+p1LoggedIn  bool
+p2LoggedIn  bool
+playerTurn  num
+
+CHAT
+ID          PLAYER   TEXT
+uniqueID    num      string
+
+*/
+</script>
+
+
+</body>
+</html>
