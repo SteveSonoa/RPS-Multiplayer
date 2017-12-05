@@ -42,6 +42,9 @@
 				<div class="container-float">
 					<div class="row" id="player1Stats">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="player1Name"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="rock">Rock</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="paper">Paper</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="scissors">Scissors</div>
 					</div>
 				</div>
 			</div>
@@ -97,9 +100,9 @@
 	var p1Choice = "none";
 
 	database.ref().set({
-		p1Wins: p1Wins,
-		p1Losses: p1Losses,
-		p1Name: p1Name,
+		p1Wins: p1Wins, 
+		p1Losses: p1Losses, 
+		p1Name: p1Name, 
 		p1Choice: p1Choice
 	})
 
@@ -137,16 +140,17 @@
 	function p1WinsLosses() {
 		$("#player1Stats").append(
 			'<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 stats" id="player1LblWins"></div>'
-			+ '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 stats" id="player1LblLosses">Losses: </div>'
+			+ '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 stats" id="player1LblLosses"></div>'
 		);
 	}
 
 	if(playerTurn == 1) {
-		$("#player1Stats").append(
-			'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="rock"></div>'
-			+ '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="paper"></div>'
-			+ '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="scissors"></div>'
-		);
+
+		// $("#player1Stats").append(
+		// 	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="rock"></div>'
+		// 	+ '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="paper"></div>'
+		// 	+ '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="scissors"></div>'
+		// );
 		p1WinsLosses();
 	}
 
@@ -155,7 +159,7 @@
 		p1Choice = $(this).attr("id");
 		console.log(p1Choice);
 
-		database.ref().set({
+		database.ref().update({
 			p1Choice: p1Choice
 		});
 	});
