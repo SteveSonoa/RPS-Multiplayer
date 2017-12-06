@@ -45,19 +45,21 @@
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="rock">Rock</div>
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="paper">Paper</div>
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="scissors">Scissors</div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 aRight" id="player1LblWins"></div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 aLeft" id="player1LblLosses"></div>
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="gameStats"></div>
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stats" id="gameStats"></div>
 			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 				<div class="container-float">
 					<div class="row" id="player2Stats">
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="player2Name"></div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="rock"></div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="paper"></div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="scissors"></div>
-						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="player2LblWins"></div>
-						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="player2LblLosses"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats" id="player2Name"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="rock"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="paper"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="scissors"></div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 aRight" id="player2LblWins"></div>
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 aLeft" id="player2LblLosses"></div>
 					</div>
 				</div>
 
@@ -94,17 +96,32 @@
 
 	var p1Wins = 0;
 	var p1Losses = 0;
-	var p1Name = "Steve";
-	var playerTurn = 1;
+	var p1Name;
 	var p1LoggedIn = true;
 	var p1Choice = "none";
 
-	database.ref().set({
-		p1Wins: p1Wins, 
-		p1Losses: p1Losses, 
-		p1Name: p1Name, 
-		p1Choice: p1Choice
-	})
+	var p2Wins = 0;
+	var p2Losses = 0;
+	var p2Name;
+	var p2LoggedIn = true;
+	var p2Choice = "none";
+
+	var playerTurn = 1;
+	var whoAmI = "none";
+
+	database.ref().update({
+		db_p1Wins: p1Wins, 
+		db_p1Losses: p1Losses, 
+		// db_p1Name: null, 
+		db_p1LoggedIn: p1LoggedIn,
+		db_p1Choice: p1Choice,
+
+		db_p2Wins: p2Wins, 
+		db_p2Losses: p2Losses, 
+		// db_p2Name: null, 
+		db_p2LoggedIn: p2LoggedIn,
+		db_p2Choice: p2Choice
+	});
 
 	// Using .on("value", function(snapshot)) syntax will retrieve the data
     // from the database (both initially and every time something changes)
@@ -112,21 +129,47 @@
     database.ref().on("value", function(snapshot) {
 
 		// Then we console.log the value of snapshot
-		console.log(snapshot);
+		console.log(snapshot.val().db_p1LoggedIn);
 
-		// if(p1LoggedIn) {
-			$("#player1Name").text(snapshot.val().p1Name);
-			$("#player1LblWins").text("Wins: " + snapshot.val().p1Wins);
-			$("#player1LblLosses").text("Losses: " + snapshot.val().p1Losses);
-		// }
+		if(localStorage.getItem("whoAmI") != null) {
+			whoAmI = localStorage.getItem("whoAmI");
+			if(localStorage.getItem("p1Name") != null && whoAmI == "player1" && localStorage.getItem("p1Name") == snapshot.val().db_p1Name) {
+				p1Name = snapshot.val().db_p1Name;
+			}
+			else if (localStorage.getItem("p2Name") != null && whoAmI == "player2" && localStorage.getItem("p2Name") == snapshot.val().db_p2Name){
+				p2Name = snapshot.val().db_p2Name;
+			}
+		}
 
-		if(snapshot.val().p1Choice != "none") {
+		if(snapshot.val().db_p1Name != null) {
+			$("#player1Name").text(snapshot.val().db_p1Name);
+			$("#player1LblWins").text("Wins: " + snapshot.val().db_p1Wins);
+			$("#player1LblLosses").text("Losses: " + snapshot.val().db_p1Losses);
+		}
+
+		if(snapshot.val().db_p2Name != null) {
+			$("#player2Name").text(snapshot.val().db_p2Name);
+			$("#player2LblWins").text("Wins: " + snapshot.val().db_p2Wins);
+			$("#player2LblLosses").text("Losses: " + snapshot.val().db_p2Losses);
+		}		
+
+		if(snapshot.val().db_p1Choice != "none") {
 	    	// Then we change the html associated with the number.
-	    	$("#gameStats").text("Player 1: " + snapshot.val().p1Choice);
+	    	$("#gameStats").text("Player 1: " + snapshot.val().db_p1Choice);
 	    }
 
+		if(whoAmI == "none" && snapshot.val().db_p1Name == null) {
+			drawPlayerNameInput("player1");
+		}
+		else if(whoAmI == "none" && snapshot.val().db_p2Name == null) {
+			drawPlayerNameInput("player2");
+		}
+		else {
+			drawPlayerNameDisplay();
+		}
+
     	// Then update the clickCounter variable with data from the database.
-    	p1Choice = snapshot.val().p1Choice;
+    	p1Choice = snapshot.val().db_p1Choice;
 
     // If there is an error that Firebase runs into -- it will be stored in the "errorObject"
     // Again we could have named errorObject anything we wanted.
@@ -136,56 +179,71 @@
     	console.log("The read failed: " + errorObject.code);
     });
 
-    // Draws Player 1's Wins & Losses at the bottom of the Player 1 Div
-	function p1WinsLosses() {
-		$("#player1Stats").append(
-			'<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 stats" id="player1LblWins"></div>'
-			+ '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 stats" id="player1LblLosses"></div>'
-		);
-	}
-
-	if(playerTurn == 1) {
-
-		// $("#player1Stats").append(
-		// 	'<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="rock"></div>'
-		// 	+ '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="paper"></div>'
-		// 	+ '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 choice" id="scissors"></div>'
-		// );
-		p1WinsLosses();
-	}
-
 	$(document).on("click", ".choice", function() {
 
 		p1Choice = $(this).attr("id");
 		console.log(p1Choice);
 
 		database.ref().update({
-			p1Choice: p1Choice
+			db_p1Choice: p1Choice
 		});
 	});
 
+	$(document).on("click", ".btnPlayerNameInput", function() {
+		event.preventDefault();
 
+		if($(this).attr("id") == "player1") {
+			p1Name = $("#playerNameInput").val().trim();
+			database.ref().update({
+				db_p1Name: p1Name
+			});
+			
+			whoAmI = "player1";
+			localStorage.setItem("whoAmI", "player1");
+			localStorage.setItem("p1Name", p1Name);
+			drawPlayerNameDisplay();
+			console.log(p1Name);
+		}
+		else if($(this).attr("id") == "player2") {
+			p2Name = $("#playerNameInput").val().trim();
+			database.ref().update({
+				db_p2Name: p2Name
+			});
 
-/*
-DBVARS
-ID          VALUE
-p1Name      string
-p2Name      string
-p1Choice    string
-p2Choice    string
-p1Wins      num
-p1Losses    num
-p2Wins      num
-p2Losses    num
-p1LoggedIn  bool
-p2LoggedIn  bool
-playerTurn  num
+			localStorage.setItem("whoAmI", "player2");
+			localStorage.setItem("p2Name", p2Name);
+			whoAmI = "player2";
+			drawPlayerNameDisplay();
+		}
+	});
 
-CHAT
-ID          PLAYER   TEXT
-uniqueID    num      string
+	function drawPlayerNameInput(whichPlayer) {
+    	$("#playerIntro").html(
+			'<form class="form-inline">'
+		+		'<div class="form-group">'
+		+			'<input type="text" class="form-control" id="playerNameInput" placeholder="Your Name">'
+		+		'</div>'
+		+		'<button type="submit" class="btn btn-default btnPlayerNameInput" id="' + whichPlayer + '">Start</button>'
+		+	'</form>'
+		);
+	}
 
-*/
+	function drawPlayerNameDisplay() {
+		if(whoAmI == "none") {
+			$("#playerIntro").html("You are currently spectating.");
+		}
+		else if(whoAmI == "player1") {
+			$("#playerIntro").html("Hi, " + p1Name + "! You are player 1.");
+		}
+		else if(whoAmI == "player2") {
+			$("#playerIntro").html("Hi, " + p2Name + "! You are player 2.");
+		}
+	}
+
+	// $(window).unload(function(){
+	// 	localStorage.removeItem("whoAmI");
+	// });
+
 </script>
 
 

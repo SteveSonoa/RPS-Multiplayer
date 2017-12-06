@@ -5,3 +5,16 @@
 .stats {
 	text-align: center;
 }
+
+.aRight {
+	text-align: right;
+}
+
+.aLeft {
+	text-align: left;
+}
+
+#playerIntro,
+#turnStatus {
+	text-align: center;
+}
