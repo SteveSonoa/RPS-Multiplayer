@@ -27,253 +27,64 @@
 </head>
 <body>
 
-	<!-- Headline header outside the container div -->
-	<div class="panel panel-default">
-		<div class="panel-body">
-			<h1>Rock Paper Scissors</h1>
-		</div>
-	</div>
-
 	<div class="container">
 		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center" id="header"><h1>Rock Paper Scissors</h1></div>
+		</div>
+		<div class="row">
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="playerIntro"></div>
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="turnStatus"></div>
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats" id="gameStats"></div>
 			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 				<div class="container-float">
 					<div class="row" id="player1Stats">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats" id="player1Name"></div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="rock">Rock</div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="paper">Paper</div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="scissors">Scissors</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="p1c1" data-val="Rock"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="p1c2" data-val="Paper"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="p1c3" data-val="Scissors"></div>
 						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 aRight" id="player1LblWins"></div>
 						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 aLeft" id="player1LblLosses"></div>
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stats" id="gameStats"></div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 stats" id="p1Image"></div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 stats" id="p2Image"></div>
 			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 				<div class="container-float">
 					<div class="row" id="player2Stats">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats" id="player2Name"></div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="rock"></div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="paper"></div>
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="scissors"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="p2c1" data-val="Rock"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="p2c2" data-val="Paper"></div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 stats choice" id="p2c3" data-val="Scissors"></div>
 						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 aRight" id="player2LblWins"></div>
 						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 aLeft" id="player2LblLosses"></div>
 					</div>
 				</div>
 
 			</div>
-			<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"></div>
-			<div class="col-lg-10 col-md-10 col-sm-12 col-xs-12" id="chat">
-				<textarea class="form-control" rows="6" id="chatTextArea"></textarea>
-				<form class="form-horizontal">
-					<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		</div>
+	</div>
+
+	<div class="container-float" id="bottomDiv">
+		<div class="row">
+			<div class="col-lg-4 col-lg-push-4 col-md-4 col-md-push-4 col-sm-12 col-xs-12">
+				<form>
+					<div class="form-group">
+						<textarea readonly class="form-control" rows="6" id="chatTextArea"></textarea>							
+					</div>
+					<div class="input-group">
 						<input type="text" class="form-control" id="inputChatText" placeholder="Send A Message">
-						<button type="submit" class="btn btn-default" id="chatSubmit">Send</button>
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-default" id="chatSubmit">Send</button>
+						</span>
 					</div>
 				</form>
-			</div>
-			<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12"></div>			
+			</div>		
 		</div>
 	</div>
 
 <script type="text/javascript">
 
-	// Initialize Firebase
-	var config = {
-		apiKey: "AIzaSyAD0J15qtz5LDSLsrm1hBNAoZ4kP0cS_FY",
-		authDomain: "stevesonoa-playground.firebaseapp.com",
-		databaseURL: "https://stevesonoa-playground.firebaseio.com",
-		projectId: "stevesonoa-playground",
-		storageBucket: "",
-		messagingSenderId: "1052450720326"
-	};
-	firebase.initializeApp(config);
 
-	// Get a reference to the database service
-	var database = firebase.database();
-
-	var p1Wins = 0;
-	var p1Losses = 0;
-	var p1Name;
-	var p1LoggedIn = true;
-	var p1Choice = "none";
-
-	var p2Wins = 0;
-	var p2Losses = 0;
-	var p2Name;
-	var p2LoggedIn = true;
-	var p2Choice = "none";
-
-	var playerTurn = 1;
-	var whoAmI = "none";
-
-	database.ref().update({
-		db_p1Wins: p1Wins, 
-		db_p1Losses: p1Losses, 
-		// db_p1Name: undefined, 
-		db_p1LoggedIn: p1LoggedIn,
-		db_p1Choice: p1Choice,
-
-		db_p2Wins: p2Wins, 
-		db_p2Losses: p2Losses, 
-		// db_p2Name: undefined, 
-		db_p2LoggedIn: p2LoggedIn,
-		db_p2Choice: p2Choice
-	});
-
-	// Using .on("value", function(snapshot)) syntax will retrieve the data
-    // from the database (both initially and every time something changes)
-    // This will then store the data inside the variable "snapshot". We could rename "snapshot" to anything.
-    database.ref().on("value", function(snapshot) {
-
-		// Then we console.log the value of snapshot
-		console.log(snapshot.val().db_p1LoggedIn);
-
-		// If db_player1 has a name, display p1Stats
-		if(snapshot.val().db_p1Name !== undefined) {
-			$("#player1Name").text(snapshot.val().db_p1Name);
-			$("#player1LblWins").text("Wins: " + snapshot.val().db_p1Wins);
-			$("#player1LblLosses").text("Losses: " + snapshot.val().db_p1Losses);
-		}
-		else {
-			$("#player1Name").text(" ");
-			$("#player1LblWins").text(" ");
-			$("#player1LblLosses").text(" ");
-		}
-
-		// If db_player2 has a name, display p2Stats
-		if(snapshot.val().db_p2Name !== undefined) {
-			$("#player2Name").text(snapshot.val().db_p2Name);
-			$("#player2LblWins").text("Wins: " + snapshot.val().db_p2Wins);
-			$("#player2LblLosses").text("Losses: " + snapshot.val().db_p2Losses);
-		}
-		else {
-			$("#player2Name").text(" ");
-			$("#player2LblWins").text(" ");
-			$("#player2LblLosses").text(" ");
-		}		
-
-		// If p1Choice has not been made, allow p1 to make a choice
-		if(snapshot.val().db_p1Choice !== "none") {
-	    	// Then we change the html associated with the number.
-	    	$("#gameStats").text("Player 1: " + snapshot.val().db_p1Choice);
-	    }
-
-	    // if a new user arrives & no p1, user can become p1
-		if(whoAmI === "none" && snapshot.val().db_p1Name === undefined) {
-			drawPlayerNameInput("player1");
-		}
-		// If a new user arrives & p1 exists but no p2, user can become p2
-		else if(whoAmI === "none" && snapshot.val().db_p2Name === undefined) {
-			drawPlayerNameInput("player2");
-		}
-		// If both p1 & p2 exist, user can spectate until a spot becomes available
-		else {
-			drawPlayerNameDisplay();
-			console.log(whoAmI);
-			console.log(snapshot.val().db_p1Name);
-			console.log(snapshot.val().db_p2Name);
-		}
-
-    	// Set the local variable of p1's choice
-    	p1Choice = snapshot.val().db_p1Choice;
-
-    // If there is an error that Firebase runs into -- it will be stored in the "errorObject"
-    // Again we could have named errorObject anything we wanted.
-    }, function(errorObject) {
-
-    	// In case of error this will print the error
-    	console.log("The read failed: " + errorObject.code);
-    });
-
-    // When a user clicks on one of the 3 choices,
-	$(document).on("click", ".choice", function() {
-		// set the variable p1Choice to the decision made
-		p1Choice = $(this).attr("id");
-		console.log(p1Choice);
-		// Update the database with the decision made
-		database.ref().update({
-			db_p1Choice: p1Choice
-		});
-	});
-
-	// If a user inputs a name & pressed "Play"
-	$(document).on("click", ".btnPlayerNameInput", function() {
-		event.preventDefault();
-
-		// If the form was for player 1, set local p1Name & update db_p1Name
-		if($(this).attr("id") === "player1") {
-			p1Name = $("#playerNameInput").val().trim();
-			database.ref().update({
-				db_p1Name: p1Name
-			});
-			
-			// Identify which player the user is & draw the player's side of the board
-			whoAmI = "player1";
-			drawPlayerNameDisplay();
-			console.log(p1Name);
-		}
-		// If the form was for player 2, do the same
-		else if($(this).attr("id") === "player2") {
-			p2Name = $("#playerNameInput").val().trim();
-			database.ref().update({
-				db_p2Name: p2Name
-			});
-
-			whoAmI = "player2";
-			drawPlayerNameDisplay();
-		}
-	});
-
-	// Draws the Player Name Input area if a player's seat is empty
-	function drawPlayerNameInput(whichPlayer) {
-    	$("#playerIntro").html(
-			'<form class="form-inline">'
-		+		'<div class="form-group">'
-		+			'<input type="text" class="form-control" id="playerNameInput" placeholder="Your Name">'
-		+		'</div>'
-		+		'<button type="submit" class="btn btn-default btnPlayerNameInput" id="' + whichPlayer + '">Start</button>'
-		+	'</form>'
-		);
-	}
-
-	// Shows the player which seat they're in, or if they're spectating
-	function drawPlayerNameDisplay() {
-		if(whoAmI === "none") {
-			$("#playerIntro").html("You are currently spectating.");
-		}
-		else if(whoAmI === "player1") {
-			$("#playerIntro").html("Hi, " + p1Name + "! You are player 1.");
-		}
-		else if(whoAmI === "player2") {
-			$("#playerIntro").html("Hi, " + p2Name + "! You are player 2.");
-		}
-	}
-
-	// When the user closes the window or tab, their seat becomes available
-	$(window).unload(function(){
-		// If the player is p1, reset the p1 DB values
-		if(whoAmI === "player1") {
-			database.ref().update({
-				db_p1Name: null,
-				db_p1Wins: 0,
-				db_p1Losses: 0,
-				db_p1LoggedIn: false
-			});
-		}
-		// If the player is p2, reset the p2 DB values
-		else if(whoAmI === "player2") {
-			database.ref().update({
-				db_p2Name: null,
-				db_p2Wins: 0,
-				db_p2Losses: 0,
-				db_p2LoggedIn: false
-			});
-		}
-		// Do *NOT* end with a simple "else" because if a spectator leaves, no other action is necessary
-	});
 </script>
 
 

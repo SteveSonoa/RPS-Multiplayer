@@ -1,3 +1,37 @@
+body {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: #eeeeee;
+    background-image: url("../images/background_image.jpg");
+
+	color: #aaaadd;
+	font-size: 24px;
+	font-weight: bold;
+	text-shadow:
+       2px 3px 0 #000,
+     -1px -1px 0 #000,  
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+       1px 1px 0 #000;
+}
+
+h1 {
+	font-size: 48px;
+	font-weight: bolder;
+}
+
+.panel-default {
+	width: 50%;
+	margin: 0 auto;
+	margin-bottom: 10px;
+	background-color: #3333ff;
+}
+
 .panel-body {
 	text-align: center;
 }
@@ -14,7 +48,24 @@
 	text-align: left;
 }
 
+#bottomDiv {
+	position: fixed;
+	bottom: 0px;
+	left: 0%;
+}
+
+#header {
+	margin-bottom: 25px;
+}
+
 #playerIntro,
 #turnStatus {
 	text-align: center;
+}
+
+#chatTextArea {
+	font-size: 12px;
+	font-weight: normal;
+	color: #000000;
+	text-shadow: none;
 }
