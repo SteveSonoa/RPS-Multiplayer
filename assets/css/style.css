@@ -52,10 +52,15 @@ h1 {
 	position: fixed;
 	bottom: 0px;
 	left: 0%;
+	margin-top: 75px;
 }
 
 #header {
 	margin-bottom: 25px;
+}
+
+#heightBar {
+	height: 125px;
 }
 
 #playerIntro,
